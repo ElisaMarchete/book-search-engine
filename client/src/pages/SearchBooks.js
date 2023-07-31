@@ -19,7 +19,6 @@ const SearchBooks = () => {
   const [saveBook, { error }] = useMutation(SAVE_BOOK);
 
   // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
-  // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
   useEffect(() => {
     return () => saveBookIds(savedBookIds);
   });
@@ -32,17 +31,19 @@ const SearchBooks = () => {
       return false;
     }
 
+    // if there is input, then fech the api
     try {
       const response = await fetch(
         `https://www.googleapis.com/books/v1/volumes?q=${searchInput}`
       );
-
+      // if the response is not ok, throw an error
       if (!response.ok) {
         throw new Error("something went wrong!");
       }
-
+      // if the response is ok, then get the data from the response
       const { items } = await response.json();
 
+      // map through the data and create a new object for each book
       const bookData = items.map((book) => ({
         bookId: book.id,
         authors: book.volumeInfo.authors || ["No author to display"],
@@ -51,25 +52,29 @@ const SearchBooks = () => {
         image: book.volumeInfo.imageLinks?.thumbnail || "",
       }));
 
+      // set the state created above of searchedBooks to the new array of objects from the api
       setSearchedBooks(bookData);
+      // reset the search input
       setSearchInput("");
     } catch (err) {
       console.error(err);
     }
   };
 
-  // create function to handle saving a book to our database
+  // create function to handle saving a book to our database -> params: bookId from api response bookData
   const handleSaveBook = async (bookId) => {
-    // find the book in `searchedBooks` state by the matching id
+    // find the book in `searchedBooks` state by the matching id -
     const bookToSave = searchedBooks.find((book) => book.bookId === bookId);
 
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
+    // if there is no token, user is not logged in
     if (!token) {
       return false;
     }
 
+    // if there is a token, then try to save the book to the database using mutation above
     try {
       const { data } = await saveBook({
         variables: { bookData: { ...bookToSave } },
