@@ -4,6 +4,8 @@ const bcrypt = require("bcrypt");
 // import schema from Book.js
 const bookSchema = require("./Book");
 
+// this schema in models connects with mongoose database
+
 const userSchema = new Schema(
   {
     username: {

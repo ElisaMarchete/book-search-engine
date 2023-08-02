@@ -1,5 +1,8 @@
 import { gql } from "@apollo/client";
 
+// Mutation is a POST, PUT, or DELETE request -> client side front end
+// when fetching data in the pages everything is commig by body
+
 export const LOGIN_USER = gql`
   mutation login($email: String!, $password: String!) {
     login(email: $email, password: $password) {

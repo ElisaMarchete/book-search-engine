@@ -8,6 +8,8 @@ import { removeBookId } from "../utils/localStorage";
 import Auth from "../utils/auth";
 
 const SavedBooks = () => {
+  // USEQUERY and USEMUTATION Creates Post with Body (Payload), send to server, server sends back response into data  -> FETCHING DATA
+  // All came from body
   const { loading, data } = useQuery(QUERY_USER);
   const [removeBook, { error }] = useMutation(REMOVE_BOOK);
 
@@ -70,6 +72,9 @@ const SavedBooks = () => {
                     <Card.Body>
                       <Card.Title>{book.title}</Card.Title>
                       <p className="small">Authors: {book.authors}</p>
+                      <Card.Link href={book.link} target="_blank">
+                        Go to book!
+                      </Card.Link>
                       <Card.Text>{book.description}</Card.Text>
                       <Button
                         className="btn-block btn-danger"

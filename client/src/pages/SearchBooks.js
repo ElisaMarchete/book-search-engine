@@ -16,6 +16,8 @@ const SearchBooks = () => {
   // create state to hold saved bookId values
   const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
 
+  // USEQUERY and USEMUTATION Creates Post with Body (Payload), send to server, server sends back response into data  -> FETCHING DATA
+  // All came from body
   const [saveBook, { error }] = useMutation(SAVE_BOOK);
 
   // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
@@ -44,13 +46,16 @@ const SearchBooks = () => {
       const { items } = await response.json();
 
       // map through the data and create a new object for each book
+
       const bookData = items.map((book) => ({
         bookId: book.id,
         authors: book.volumeInfo.authors || ["No author to display"],
         title: book.volumeInfo.title,
         description: book.volumeInfo.description,
         image: book.volumeInfo.imageLinks?.thumbnail || "",
+        link: book.volumeInfo.infoLink,
       }));
+      // console.log(bookData);
 
       // set the state created above of searchedBooks to the new array of objects from the api
       setSearchedBooks(bookData);
@@ -79,7 +84,7 @@ const SearchBooks = () => {
       const { data } = await saveBook({
         variables: { bookData: { ...bookToSave } },
       });
-      console.log(savedBookIds);
+      // console.log(savedBookIds);
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
     } catch (err) {
       console.error(err);
@@ -133,6 +138,9 @@ const SearchBooks = () => {
                   <Card.Body>
                     <Card.Title>{book.title}</Card.Title>
                     <p className="small">Authors: {book.authors}</p>
+                    <Card.Link href={book.link} target="_blank">
+                      Go to book!
+                    </Card.Link>
                     <Card.Text>{book.description}</Card.Text>
                     {Auth.loggedIn() && (
                       <Button

@@ -12,15 +12,18 @@ import SearchBooks from "./pages/SearchBooks";
 import SavedBooks from "./pages/SavedBooks";
 import Navbar from "./components/Navbar";
 
-// createHttpLink is a function that allows us to create a new instance of the ApolloClient
+// Create an HTTP link to connect to the GraphQL server -> The link is configured to send requests to the "/graphql" endpoint.
+// The "uri" option specifies the URL to which the requests will be sent.
 const httpLink = createHttpLink({
   uri: "/graphql",
 });
 
-// setContext is another function that will set the HTTP request headers of every request to include the token, whether the request needs it or not.
+// Get the token from the "localStorage" with the key "id_token".
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem("id_token");
 
+  // Modifies the headers of each outgoing HTTP request by adding an "authorization" header with the authentication token to authenticate the user with the GraphQL server.
+  // This function is provided to Apollo Client through "setContext" to customize the headers before sending a request to the GraphQL server.
   return {
     headers: {
       ...headers,

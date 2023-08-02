@@ -1,5 +1,7 @@
 const { Schema } = require("mongoose");
 
+// this schema in models connects with mongoose database
+
 const bookSchema = new Schema({
   authors: [
     {

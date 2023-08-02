@@ -1,5 +1,11 @@
 const { gql } = require("apollo-server-express");
 
+// typeDefs = schema Define data in GraphQL
+
+// query is a GET request - mutation is a POST, PUT, or DELETE request
+
+// type to send information
+// input to receive information
 const typeDefs = gql`
   type User {
     _id: ID!
